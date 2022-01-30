@@ -6,6 +6,7 @@ import com.cortes.blog.BlogServer.payload.PostDTO;
 import com.cortes.blog.BlogServer.payload.PostPageResponse;
 import com.cortes.blog.BlogServer.repositories.PostRepository;
 import com.cortes.blog.BlogServer.services.PostService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,9 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
-
-    public PostServiceImpl(PostRepository postRepository) {
+    private ModelMapper mapper;
+    public PostServiceImpl(PostRepository postRepository, ModelMapper mapper) {
         this.postRepository = postRepository;
+        this.mapper = mapper;
     }
 
     @Override
@@ -71,19 +73,21 @@ public class PostServiceImpl implements PostService {
     }
 
     private PostDTO toPostDTO(Post post){
-        PostDTO postResponse = new PostDTO();
-        postResponse.setId(post.getId());
-        postResponse.setContent(post.getContent());
-        postResponse.setDescription(post.getDescription());
-        postResponse.setTitle(post.getTitle());
-        return postResponse;
+        PostDTO postDTO = mapper.map(post, PostDTO.class);
+//        PostDTO postResponse = new PostDTO();
+//        postResponse.setId(post.getId());
+//        postResponse.setContent(post.getContent());
+//        postResponse.setDescription(post.getDescription());
+//        postResponse.setTitle(post.getTitle());
+        return postDTO;
     }
 
     private Post toPost(PostDTO postDTO){
-        Post post = new Post();
-        post.setTitle(postDTO.getTitle());
-        post.setDescription(postDTO.getDescription());
-        post.setContent(postDTO.getContent());
+        Post post = mapper.map(postDTO, Post.class);
+//        Post post = new Post();
+//        post.setTitle(postDTO.getTitle());
+//        post.setDescription(postDTO.getDescription());
+//        post.setContent(postDTO.getContent());
         return post;
     }
 }

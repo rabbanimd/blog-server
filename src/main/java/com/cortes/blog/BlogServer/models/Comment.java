@@ -19,6 +19,7 @@ public class Comment {
 
     private String name;
     private String email;
+    @Column(length = 1000)
     private String body;
 
     @ManyToOne(fetch = FetchType.LAZY)
